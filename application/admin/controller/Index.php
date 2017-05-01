@@ -7,10 +7,18 @@ use think\Request;
 
 class Index extends Controller
 {
+    protected $obj = null;
+    public function _initialize()
+    {
+        $this->obj = model('Poem');
+    }
 
     public function index()
     {
-        return $this->fetch();
+        $poems = $this->obj->getPoems();
+        return $this->fetch('',[
+            'poems' => $poems,
+        ]);
     }
 
     /**

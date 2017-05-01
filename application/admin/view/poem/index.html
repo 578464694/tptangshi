@@ -16,6 +16,7 @@
 </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
+
 			<thead>
 				<tr class="text-c">
 					<th width="20">ID</th>
@@ -28,20 +29,23 @@
 				</tr>
 			</thead>
 			<tbody>
+			{volist name="poems" id="vo"}
 
 				<tr class="text-c">
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{$vo.id}</td>
+					<td>{$vo.title}</td>
+					<td>{$vo.author}</td>
+					<td>{$vo.content|cutwords}</td>
+
+					<td>{$vo.create_time}</td>
+					<td>{$vo.status|status}</td>
 					<td class="td-manage"><a style="text-decoration:none" class="ml-5" onClick="" href="javascript:;" title="查看"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 				</tr>
-
+			{/volist}
 			</tbody>
 		</table>
 	</div>
+	{$poems|pagination}
 </div>
 <!--包含头部文件-->
 {include file="public/footer" /}

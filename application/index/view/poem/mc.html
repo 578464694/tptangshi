@@ -1,0 +1,75 @@
+<!--包含头部文件-->
+{include file="public/header" /}
+<div class="cl pd-5 bg-1 bk-gray mt-20"> 机器先</div>
+<article class="page-container">
+    <form class="form form-horizontal" id="form-article-add" method="post" action="{:url('poem/add')}">
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>唐诗名：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="{$poem->title}" placeholder="" id="" name="title" readonly="true">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">作者：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="{$poem->author}" placeholder="" id="" name="author" readonly="true">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">上句：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="pre_word" name="author" readonly="true">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">下句：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="next_word" name="author">
+                <span class='hidden label label-success radius'>正确</span>
+                <span class='hidden label label-danger radius'>错误</span>
+            </div>
+            <span id="tip"></span>
+        </div>
+
+        <div class="row cl">
+
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 下一首</button>
+            </div>
+        </div>
+    </form>
+</article>
+<script>
+    /**定义页面全局变量**/
+
+    var SCOPE = {
+        'user_url': "{:url('api/user/updateUserMatchInfoById')}",
+    };
+    var error = 0;
+    var poem = {$poem};
+    poem.xpoint = {$xpoint};
+    poem.ypoint = {$ypoint};
+    poem.com_correct = 0;
+    poem.peo_correct = 0;
+
+    var user_id = "{$user['id']}";
+    console.log(user_id);
+
+    $('document').ready(function () {
+        $('#pre_word').val(poem.content[poem.xpoint][poem.ypoint]);
+    });
+
+</script>
+<script type="text/javascript" src="__STATIC__/index/js/mc.js"></script>
+<!--包含头部文件-->
+{include file="public/footer" /}
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script src="__STATIC__/admin/hui/lib/My97DatePicker/WdatePicker.js"></script>
+
+</body>
+</html>

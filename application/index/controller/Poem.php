@@ -1,11 +1,8 @@
 <?php
-
-namespace app\admin\controller;
-
+namespace app\index\controller;
 use think\Controller;
-use think\Request;
 
-class Poem extends Controller
+class Poem extends Base
 {
     protected $obj = null;
     public function _initialize()
@@ -13,11 +10,23 @@ class Poem extends Controller
         $this->obj = model('Poem');
     }
 
-    public function index()
+    public function mc()
     {
-        $poems = $this->obj->getPoems();
+        $poem = $this->obj->getRandomPoem();
+        $content = explodePoem($poem[0]->content);  // 将诗句封装成二维数组
+        $poem[0]->content = $content;               // 重新赋值 content
         return $this->fetch('',[
-            'poems' => $poems,
+            'poem' => $poem[0],
+            'xpoint' => 0,
+            'ypoint' => 0,
+            'user' => $this->getLoginUser(),
+        ]);
+    }
+
+    public function player()
+    {
+        return $this->fetch('',[
+            'user' => $this->getLoginUser(),
         ]);
     }
 
@@ -51,49 +60,13 @@ class Poem extends Controller
         {
             return $this->fetch();
         }
-
     }
 
-    /**
-     *
-     * @return mixed
-     */
-    public function mc()
+    public function poem()
     {
-
-        return $this->fetch();
-    }
-
-    public function check()
-    {
-        $poems = $this->obj->getPoems(0);   // 获取待审诗句
         return $this->fetch('',[
-           'poems' => $poems,
+            'user' => $this->getLoginUser(),
         ]);
     }
 
-    /**
-     * 修改状态
-     */
-    public function status()
-    {
-        $id = input('param.id', 0, 'intval');
-        $status = input('param.status', 0, 'intval');
-        if(!$id)
-        {
-            $this->error('参数错误');
-        }
-        $result = $this->obj->save(['status' => $status], ['id' => $id]);
-        if(!$result)
-        {
-            $this->error('状态修改失败');
-        }
-        $this->success('状态修改成功');
-    }
-
-    public function detail()
-    {
-        $data = input('param.');
-        print_r($data);
-    }
 }
