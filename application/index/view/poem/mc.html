@@ -31,6 +31,8 @@
                 <span class='hidden label label-success radius'>正确</span>
                 <span class='hidden label label-danger radius'>错误</span>
             </div>
+            <audio class="hidden" id="shibie" controls="controls">识别</audio>
+
             <span id="tip"></span>
         </div>
 
@@ -47,6 +49,7 @@
 
     var SCOPE = {
         'user_url': "{:url('api/user/updateUserMatchInfoById')}",
+        'voice_url' : "{:url('api/voice/getVoice')}",
     };
     var error = 0;
     var poem = {$poem};
@@ -60,10 +63,13 @@
 
     $('document').ready(function () {
         $('#pre_word').val(poem.content[poem.xpoint][poem.ypoint]);
+        voiceRecognition($('#pre_word').val());
     });
 
 </script>
 <script type="text/javascript" src="__STATIC__/index/js/mc.js"></script>
+
+
 <!--包含头部文件-->
 {include file="public/footer" /}
 <script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.config.js"></script>
