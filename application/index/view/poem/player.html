@@ -1,0 +1,175 @@
+<!--包含头部文件-->
+{include file="public/header" /}
+<div class="cl pd-5 bg-1 bk-gray mt-20"> 玩家先</div>
+<article class="page-container">
+    <div class="form form-horizontal" id="form-article-add">
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>唐诗名：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="title" readonly="true">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">作者：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="author" readonly="true">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">上句：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="pre_word" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">下句：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" value="" placeholder="" id="next_word" readonly="true">
+            </div>
+            <span id="tip"></span>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 下一首</button>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <label><input type="radio" name="changeInputMode" value="0" onclick="changeInputMenu(0)">单句</label>
+                <label><input type="radio" name="changeInputMode" value="1" onclick="changeInputMenu(1)">整首输入</label>
+            </div>
+        </div>
+
+        <div id="add_menu" class="hidden">
+            <article class="page-container">
+            <form class="form form-horizontal" id="form-article-add" method="post" action="{:url('poem/add')}">
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>唐诗名：</label>
+                    <div class="formControls col-xs-8 col-sm-3">
+                        <input type="text" class="input-text" value="" placeholder="" id="" name="title">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">作者：</label>
+                    <div class="formControls col-xs-8 col-sm-3">
+                        <input type="text" class="input-text" value="" placeholder="" id="" name="author">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">诗句：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <script id="editor2"  type="text/plain" name="content" style="width:100%;height:400px;"></script>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                        <!--<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 添加</button>-->
+                        <input type="submit" class="btn btn-primary radius">
+                    </div>
+                </div>
+            </form>
+        </article>
+        </div>
+    </div>
+</article>
+<script>
+    /**定义页面全局变量**/
+
+    var SCOPE = {
+        'user_url': "{:url('api/user/updateUserMatchInfoById')}",
+        'word_url' : "{:url('api/poem/getWords')}",
+    };
+    var poem = {
+        'words' : '',   // 查询诗句关键词
+        'content' : [], // 诗句内容
+        'title': '',
+        'author' : '',
+        'xpoint' : 0,   // 诗句的列数
+        'ypoint' : 0,   // 诗句的行数
+        'ok' : 0,    // 查询到的诗句符合首句 0 代表未查到数据，1 代表查到数据，用户输入的诗句完整 2 代表查到数据，用户输入的诗句不完整
+    };
+    var error = 0;
+    var user_id = "{$user['id']}";
+
+    function checkPoemOk(ok) {
+        switch (ok)
+        {
+            case 0:
+                $('#next_word').val('');
+                return '我不会这首诗，请输入下句补充我的知识库吧。'
+            case 1:
+                $('#next_word').val(poem.content[poem.xpoint][1]);
+                return '我会背这首诗，咱们打了个平手';
+            case 2:
+                $('#next_word').val('');
+                return '请输入完整的上句';
+            default:return '';
+        }
+    }
+
+    $('#pre_word').blur(function () {
+        poem.words = $('#pre_word').val();
+        if( poem.words == '')
+        {
+            $('#tip').text('');
+            return;
+        }
+        var postData = {
+            'words':  poem.words,
+        };
+        $.post(SCOPE.word_url,postData,function(result){
+            if(result.status == 1)
+            {
+                poem.content = result.data.content;
+                poem.ok = 2;
+                $.each(poem.content,function (key,value) {
+                    if(value[0] == poem.words)
+                    {
+                        poem.ok = 1;
+                        poem.xpoint = key;
+                        console.log(poem.xpoint);   // 设置 poem 的xpoint
+                    }
+                });
+            } else if (result.status == 0) {
+                poem.ok = 0;
+            }
+            var tip = checkPoemOk(poem.ok);
+            $('#tip').text(tip);
+        },'json');
+    });
+</script>
+<script type="text/javascript">
+    function changeInputMenu(id) {
+        if(id == 1)
+        {
+            $('#add_menu').removeClass('hidden');
+        }
+        else
+        {
+            $('#add_menu').addClass('hidden');
+        }
+    }
+
+</script>
+<!--包含头部文件-->
+{include file="public/footer" /}
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script src="__STATIC__/admin/hui/lib/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function(){
+        var ue = UE.getEditor('editor');
+        var ue2 = UE.getEditor('editor2');
+    });
+</script>
+</body>
+</html>

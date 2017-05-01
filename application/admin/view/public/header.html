@@ -21,11 +21,43 @@
 <link rel="stylesheet" type="text/css" href="__STATIC__/admin/hui/static/h-ui.admin/css/style.css" />
 
 <link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/header.css" /> <!--覆盖 h-ui 样式-->
-<!--[if IE 6]>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/admin/css/common.css" />
+    <!--[if IE 6]>
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>我爱背唐诗</title>
 <meta name="keywords" content="我爱背唐诗">
 <meta name="description" content="我爱背唐诗">
+
+    <script src="__STATIC__/mp3/js/jquery-1.7.2.min.js" language="javascript"></script>
+    <script>
+        function  f_getURL(){
+            var url = "__STATIC__/mp3/acceptfile.php";
+            return url;
+        }
+        function f_getMAX(){
+            return 60;//最长录音时间
+        }
+        function f_getMIN(){
+            return 3; //最小录音时间
+        }
+        function f_complete(filename){
+            alert(filename);
+            /*if (typeof(SUPER_REPLY) != 'undefined') {
+             if (wysiwyg) {
+             editdoc.body.innerHTML += '[audio]rec/'+ filename +'[/audio]';
+             } else {
+             editdoc.value += '[audio]rec/'+ filename +'[/audio]';
+             }
+             }*/
+            var test=jQuery('#fastpostmessage').val() + '[audio]'+ filename +'[/audio]';
+            alert(test);
+            jQuery('#fastpostmessage').val(test);
+            /*if (jQuery('.pnpost').css('display') == 'none') {
+             jQuery('#fastpostform').submit();
+             }*/
+
+        }
+    </script>
 </head>

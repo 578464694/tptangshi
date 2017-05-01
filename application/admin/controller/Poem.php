@@ -7,9 +7,18 @@ use think\Request;
 
 class Poem extends Controller
 {
+    protected $obj = null;
+    public function _initialize()
+    {
+        $this->obj = model('Poem');
+    }
+
     public function index()
     {
-        return $this->fetch();
+        $poems = $this->obj->getPoems();
+        return $this->fetch('',[
+            'poems' => $poems,
+        ]);
     }
 
     public function add()
@@ -18,14 +27,17 @@ class Poem extends Controller
         if(request()->isPost())
         {
             $data = input('post.');
-            $content = $data['content'];
+            $content = strip_tags($data['content']);
             $content = str_replace('，',',',$content);  //替换中文逗号为英文逗号
             $content = str_replace('。','|',$content);  //替换中文句号为英文竖线号
 
+            $cotentArr = [];
+            $content = removenbsp($content);
+
             $poem['title'] = $data['title'];
             $poem['author'] = $data['author'];
-            $poem['content'] = trim(strip_tags($content));
-            $result = model('Poem')->add($poem);
+            $poem['content'] = trim(($content));
+            $result = model('Poem')->add($poem,0);  // 添加后需要审核
             if(!$result)
             {
                 $this->error('添加失败');
@@ -40,5 +52,48 @@ class Poem extends Controller
             return $this->fetch();
         }
 
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function mc()
+    {
+
+        return $this->fetch();
+    }
+
+    public function check()
+    {
+        $poems = $this->obj->getPoems(0);   // 获取待审诗句
+        return $this->fetch('',[
+           'poems' => $poems,
+        ]);
+    }
+
+    /**
+     * 修改状态
+     */
+    public function status()
+    {
+        $id = input('param.id', 0, 'intval');
+        $status = input('param.status', 0, 'intval');
+        if(!$id)
+        {
+            $this->error('参数错误');
+        }
+        $result = $this->obj->save(['status' => $status], ['id' => $id]);
+        if(!$result)
+        {
+            $this->error('状态修改失败');
+        }
+        $this->success('状态修改成功');
+    }
+
+    public function detail()
+    {
+        $data = input('param.');
+        print_r($data);
     }
 }
