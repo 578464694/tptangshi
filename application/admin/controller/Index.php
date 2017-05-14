@@ -13,6 +13,10 @@ class Index extends Controller
         $this->obj = model('Poem');
     }
 
+    /**
+     * 唐诗列表
+     * @return mixed
+     */
     public function index()
     {
         $poems = $this->obj->getPoems();

@@ -10,6 +10,10 @@ class Poem extends Base
         $this->obj = model('Poem');
     }
 
+    /**
+     * 机器先
+     * @return mixed
+     */
     public function mc()
     {
         $poem = $this->obj->getRandomPoem();
@@ -23,6 +27,10 @@ class Poem extends Base
         ]);
     }
 
+    /**
+     * 显示 player 页面
+     * @return mixed
+     */
     public function player()
     {
         return $this->fetch('',[
@@ -30,6 +38,10 @@ class Poem extends Base
         ]);
     }
 
+    /**
+     * 添加诗句
+     * @return mixed
+     */
     public function add()
     {
         // 判断请求方式
@@ -62,6 +74,11 @@ class Poem extends Base
         }
     }
 
+    /**
+     * 获得登陆用户
+     * 显示poem.html
+     * @return mixed
+     */
     public function poem()
     {
         return $this->fetch('',[

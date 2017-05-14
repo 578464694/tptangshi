@@ -13,6 +13,10 @@ class User extends Base
         $this->user = model('User');
     }
 
+    /**
+     * 登陆
+     * @return mixed
+     */
     public function login()
     {
         // 获得用户 session
@@ -24,6 +28,10 @@ class User extends Base
         return $this->fetch();
     }
 
+    /**
+     * 注册
+     * @return mixed
+     */
     public function register()
     {
         if(request()->isPost())
@@ -63,6 +71,9 @@ class User extends Base
 
     }
 
+    /**
+     * 登陆校验
+     */
     public function logincheck()
     {
         if(!request()->isPost())

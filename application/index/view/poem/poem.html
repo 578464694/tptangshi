@@ -155,7 +155,9 @@
 
         setTimeout(function () {
             poem.words = $('#pre_word').val();
-            if(!isEmpty(poem.content) && poem.status == 1) // content 不为空，在 content 查找用户输入的诗句,以 xpoint 为起点
+            // content 不为空，
+            // 在 content 查找用户输入的诗句,以 xpoint 为起点
+            if(!isEmpty(poem.content) && poem.status == 1)
             {
                 poem.ok = 2;
                 if(poem.words == poem.content[poem.xpoint][0])  //匹配成功

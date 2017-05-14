@@ -11,7 +11,7 @@ class Index extends Base
     }
 
     /**
-     *
+     * 添加诗句
      */
     public function add()
     {
@@ -36,6 +36,10 @@ class Index extends Base
 
     }
 
+    /**
+     * 机器
+     * @return mixed
+     */
     public function mechine()
     {
         return $this->fetch();

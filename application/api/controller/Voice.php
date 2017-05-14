@@ -19,7 +19,8 @@ class Voice
     public static function getVoice()
     {
         //http://tsn.baidu.com/text2audio
-        $txt = input('post.txt','其实我是一个演员');
+        $txt = input('post.txt','哼！都怪你们,也不哄哄人家，人家超想哭的，捶你胸口，大坏蛋！！！
+        '.'咩 捶你胸口 你好讨厌！要抱抱嘤嘤嘤哼，人家拿小拳拳捶你胸口！！！大坏蛋，打死你');
 
         $data = "tex=".$txt;
         $data .= "&lan=".config('voice.lan');

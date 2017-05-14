@@ -21,6 +21,10 @@ class Poem extends Controller
         ]);
     }
 
+    /**
+     * 添加唐诗
+     * @return mixed
+     */
     public function add()
     {
         // 判断请求方式
@@ -91,6 +95,9 @@ class Poem extends Controller
         $this->success('状态修改成功');
     }
 
+    /**
+     * 测试参数
+     */
     public function detail()
     {
         $data = input('param.');
